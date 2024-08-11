@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈 화면</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .navbar {
+            background-color: #333;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            display: flex; /* Flexbox를 사용하여 아이템들을 행으로 배치 */
+            justify-content: space-between; /* 버튼들을 좌우로 최대한 펼쳐 배치 */
+            padding: 10px 0; /* 상하 여백 추가 */
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            transition: background-color 0.3s;
+        }
+        .navbar a:hover {
+            background-color: #555;
+        }
+        .service {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .service-item {
+            flex: 0 0 calc(33.333% - 40px);
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .service-item:hover {
+            transform: translateY(-5px);
+        }
+        .service-item img {
+            width: 100px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+        .service-item h3 {
+            color: #333;
+        }
+        .service-item p {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="navbar">
+        <a href="#home">홈</a>
+        <a href="login.html" th:href="@{/login}">로그인</a>
+        <a href="login.html" th:href="@{/members/add}">회원가입</a>
+        <a href="board.html" th:href="@{/posts}">게시판</a>
+        <a href="mypage.html">마이페이지</a>
+    </div>
+
+    <h2>우리의 서비스를 소개합니다</h2>
+    <p>저희는 여러분을 위한 간편한 솔루션을 제공합니다. 로그인하여 커뮤니티에 참여하고, 게시판을 통해 소통하며, 마이페이지에서 회원 정보를 관리하세요. 저희 서비스를 이용해 주셔서 감사합니다!</p>
+
+    <div class="service">
+        <div class="service-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/4856/4856045.png" alt="Service 1">
+            <h3>커뮤니티</h3>
+            <p>여러분과 소통하고 정보를 공유합니다.</p>
+        </div>
+        <div class="service-item">
+            <img src="https://littledeep.com/wp-content/uploads/2021/05/notice-board-illustration-main-1024x607.png" alt="Service 2">
+            <h3>게시판</h3>
+            <p>다양한 주제로 소통할 수 있는 게시판입니다.</p>
+        </div>
+        <div class="service-item">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSytK7HdzDpUn5hdf3eaO4MxohL3CLpNB0QN5K9mXtrBw&s" alt="Service 3">
+            <h3>마이페이지</h3>
+            <p>회원 정보를 관리하고 개인화된 서비스를 이용하세요.</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

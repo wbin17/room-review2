@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성 폼</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            width: 80%;
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        form h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form div {
+            margin-bottom: 15px;
+        }
+        form label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        form input[type="text"],
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        form button {
+            width: 48%; /* 버튼 너비 조정 */
+            padding: 10px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        form button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+        }
+        form button[type="button"] {
+            background-color: #6c757d;
+            color: #fff;
+        }
+        form button:hover {
+            opacity: 0.8;
+        }
+        /* 버튼 컨테이너 스타일 추가 */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+<form action="/post.html" th:action method="POST">
+    <h1>게시글 작성</h1>
+    <div>
+        <label for="title">게시글 제목:</label>
+        <input type="text" id="title" name="title" required>
+    </div>
+    <input type="hidden" id="writerName" name="writerName" th:value="${member.memberName}">
+<!--    <div>-->
+<!--        <label for="writerName">작성자 이름:</label>-->
+<!--        <input type="text" id="writerName" name="writerName" required >-->
+<!--    </div>-->
+    <div>
+        <label for="address">주소:</label> <!-- 추가된 주소 입력 필드 -->
+        <input type="text" id="address" name="address" required>
+    </div>
+    <div>
+        <label for="content">게시글 내용:</label>
+        <textarea id="content" name="content" rows="5" required></textarea>
+    </div>
+
+    <!-- 버튼 컨테이너 추가 -->
+    <div class="button-container">
+        <button type="submit">게시글 작성 완료</button>
+        <!-- 취소 버튼 추가 -->
+        <button type="button" onclick="cancel()">취소</button>
+    </div>
+</form>
+
+<script>
+    // 취소 버튼 클릭 시 동작
+    function cancel() {
+        // 이전 페이지로 이동 (예시: 이전 페이지 URL)
+        window.history.back();
+    }
+</script>
+
+</body>
+</html>

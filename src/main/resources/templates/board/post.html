@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 - 게시글</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .post {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .post-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+        .post-info {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .post-content {
+            font-size: 20px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            resize: none;
+        }
+        .button-container {
+            margin-top: 40px;
+            text-align: right;
+        }
+        .button-container button {
+            padding: 14px 28px;
+            font-size: 20px;
+            margin-left: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            outline: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .edit-button {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .delete-button {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        .back-button {
+            background-color: #6c757d;
+            color: #fff;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: center; margin-bottom: 40px;">게시판 - 게시글</h1>
+
+<!-- 게시글 내용 -->
+<div class="post">
+    <div class="post-title">
+        <input type="text" class="form-control" value="제목" th:value="${post.title}" readonly>
+    </div>
+    <div class="post-info">
+        <input type="text" class="form-control" value="작성자" th:value="${post.writerName}" readonly>
+    </div>
+    <div class="post-content">
+        <div id="map" style="width: 20%; height: 150px;"></div>
+        <textarea class="form-control" rows="5" readonly th:text="${post.content}"></textarea>
+    </div>
+
+    <!-- 버튼 컨테이너 -->
+    <div class="button-container">
+        <button class="edit-button"
+                onclick="location.href='editForm.html'"
+                th:onclick="|location.href='@{/posts/{postId}/edit(postId=${post.id})}'|"><i class="fas fa-edit"></i> 게시글 수정</button>
+
+        <!-- 게시글 삭제 버튼 -->
+        <button class="delete-button" onclick="deletePost()" th:onclick="|location.href='@{/posts/{postId}/delete(postId=${post.id})}'|"><i class="fas fa-trash-alt"></i> 게시글 삭제</button>
+
+        <button class="back-button"
+                onclick="location.href='posts.html'"
+                th:onclick="|location.href='@{/posts}'|"><i class="fas fa-arrow-left"></i> 목록으로</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b4dbc6f0ee4df953d1c814f42f22a506&libraries=services"></script>
+
+<script th:inline="javascript">
+  var address = [[${post.address}]];
+</script>
+
+<script>
+    var mapContainer = document.getElementById('map');
+    var mapOption = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        level: 3
+    };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    geocoder.addressSearch(address, function(result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: coords
+            });
+            var infowindow = new kakao.maps.InfoWindow({
+                content: '<div style="width:150px;text-align:center;padding:6px 0;">집</div>'
+            });
+            infowindow.open(map, marker);
+            map.setCenter(coords);
+        } else {
+            alert('잘못된 주소 형식입니다\n지도를 표시할 수 없습니다: ' + status);
+        }
+    });
+
+    function deletePost() {
+        // 게시글 삭제 작업을 수행하는 코드를 여기에 추가
+        // 예를 들어, 삭제 작업을 서버에 요청하는 AJAX 요청을 보낼 수 있습니다.
+        // 이 부분은 프로젝트의 백엔드 로직에 따라 달라집니다.
+        // 삭제 작업이 완료되면, 원하는 페이지로 리디렉션할 수 있습니다.
+        alert("게시글을 삭제합니다.");
+    }
+</script>
+
+</body>
+</html>

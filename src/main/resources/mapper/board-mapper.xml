@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Board">
+    <insert id="save" parameterType="board">
+        insert into board_table(title, content, writerName, address)
+            values(#{title}, #{content}, #{writerName}, #{address})
+    </insert>
+
+    <select id="findAll" resultType="board">
+        select * from board_table order by id desc
+    </select>
+
+<!--    <update id="updateHits" parameterType="Long">-->
+<!--        update board_table set boardHits=boardHits+1 where id=#{postId}-->
+<!--    </update>-->
+
+    <select id="findById" resultType="board" parameterType="Long">
+<!--        select id, boardTitle, boardWriter, boardPass, boardContents, boardHits,-->
+<!--        date_format(createdAt, "%Y-%m-%d %H:%i:%s") as createdAt, fileAttached-->
+<!--        from board_table where id=#{id}-->
+        select * from board_table where id = #{PostId}
+    </select>
+
+    <select id="findByContent" resultType="board" parameterType="board">
+        SELECT * FROM board_table WHERE title = #{title} AND content = #{content} AND writerName = #{writerName}
+    </select>
+
+    <update id="update" parameterType="board">
+        update board_table set title=#{title}, content=#{content}, address=#{address}  where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        delete from board_table where id=#{id}
+    </delete>
+</mapper>
