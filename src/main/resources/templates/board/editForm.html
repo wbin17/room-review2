@@ -78,11 +78,7 @@
     </div>
     <div>
         <label for="writerName">작성자 이름:</label>
-        <input type="text" id="writerName" name="writerName" value="김두식" th:value="${post != null} ? ${post.writerName} : ''" required readonly>
-    </div>
-    <div>
-        <label for="address">주소:</label> <!-- 추가된 주소 입력 필드 -->
-        <input type="text" id="address" name="address" value="아산시" th:value="${post != null} ? ${post.address} : ''" required>
+        <input type="text" id="writerName" name="writerName" value="김두식" th:value="${post != null} ? ${post.writerId} : ''" required readonly>
     </div>
     <div>
         <label for="content">게시글 내용:</label>

@@ -1,7 +1,7 @@
 package capstone.capstonetest.web.login;
 
-import capstone.capstonetest.domain.login.LoginService;
 import capstone.capstonetest.domain.member.Member;
+import capstone.capstonetest.service.LoginService;
 import capstone.capstonetest.web.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

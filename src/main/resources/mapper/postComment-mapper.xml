@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PostComment">
+    <insert id="addComment" parameterType="postComment">
+        INSERT INTO PostComment (memberId, postId, commentText)
+        VALUES (#{memberId}, #{postId}, #{commentText})
+    </insert>
+
+    <select id="findCommentByPostId" parameterType="Long" resultType="postComment">
+        SELECT * FROM PostComment WHERE postId = #{postId}
+    </select>
+
+    <update id="updateComment" parameterType="postComment">
+        UPDATE PostComment
+        SET  commentText = #{commentText}
+        WHERE commentId = #{commentId} AND memberId = #{memberId}
+    </update>
+
+    <delete id="deleteComment" parameterType="Long">
+        delete from PostComment
+        where commentId = #{commentId}
+    </delete>
+
+</mapper>

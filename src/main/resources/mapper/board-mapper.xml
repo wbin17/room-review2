@@ -2,35 +2,64 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Board">
-    <insert id="save" parameterType="board">
-        insert into board_table(title, content, writerName, address)
-            values(#{title}, #{content}, #{writerName}, #{address})
+    <insert id="save" parameterType="board" useGeneratedKeys="true" keyProperty="id">
+        insert into Board(title, content, writerId, roomId)
+            values(#{title}, #{content}, #{writerId}, #{roomId})
     </insert>
 
     <select id="findAll" resultType="board">
-        select * from board_table order by id desc
+        select * from Board order by id desc
     </select>
 
 <!--    <update id="updateHits" parameterType="Long">-->
 <!--        update board_table set boardHits=boardHits+1 where id=#{postId}-->
 <!--    </update>-->
 
+    <select id="findBoardDetailById" parameterType="Long" resultMap="BoardDetailResultMap">
+        SELECT b.id, b.title, b.writerId,b.content, r.address, b.createdAt
+        FROM Board b
+        LEFT JOIN Room r ON b.roomId = r.id
+        WHERE b.id = #{id}
+    </select>
+
+    <resultMap id="BoardDetailResultMap" type="Board">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="writerId" column="writerId"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="createdAt"/>
+        <association property="room" javaType="Room">
+            <result property="address" column="address"/>
+        </association>
+    </resultMap>
+
     <select id="findById" resultType="board" parameterType="Long">
 <!--        select id, boardTitle, boardWriter, boardPass, boardContents, boardHits,-->
 <!--        date_format(createdAt, "%Y-%m-%d %H:%i:%s") as createdAt, fileAttached-->
 <!--        from board_table where id=#{id}-->
-        select * from board_table where id = #{PostId}
+        select * from Board where id = #{PostId}
+    </select>
+
+    <select id="findReviewsByRoomId" parameterType="Long" resultType="board">
+        select * from Board
+            where roomId = #{roomId}
     </select>
 
     <select id="findByContent" resultType="board" parameterType="board">
         SELECT * FROM board_table WHERE title = #{title} AND content = #{content} AND writerName = #{writerName}
     </select>
 
-    <update id="update" parameterType="board">
-        update board_table set title=#{title}, content=#{content}, address=#{address}  where id=#{id}
+    <select id="findBoardListByWriterId" parameterType="String" resultType="Board">
+        SELECT id, title, createdAt
+        FROM Board
+        WHERE writerId = #{writerId}
+    </select>
+
+    <update id="updatePost" parameterType="board">
+        update Board set title=#{title}, content=#{content}  where id=#{id}
     </update>
 
-    <delete id="delete" parameterType="Long">
-        delete from board_table where id=#{id}
+    <delete id="deletePost" parameterType="Long">
+        delete from Board where id=#{postId}
     </delete>
 </mapper>

@@ -1,92 +1,139 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>회원 가입</title>
-    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+        /* 기본적인 스타일 초기화 */
+        body, html {
             margin: 0;
             padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            height: 100%;
         }
+        /* 전체 컨테이너 스타일 */
         .container {
-            width: 80%;
-            max-width: 600px;
+            width: 100%;
+            max-width: 500px;
             margin: 50px auto;
-            padding: 30px;
-            background-color: #fff;
-            border-radius: 20px;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-        .form-group {
+        /* 폼 제목 스타일 */
+        h2 {
+            text-align: center;
+            color: #333;
             margin-bottom: 20px;
         }
-        .form-label {
-            font-weight: bold;
-            color: #495057;
+        /* 폼 스타일 */
+        form {
+            display: flex;
+            flex-direction: column;
         }
-        .form-control {
-            border-radius: 10px;
+        .input-group {
+            margin-bottom: 15px;
         }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            border-radius: 10px;
-            padding: 10px;
+        label {
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="date"],
+        input[type="submit"] {
             width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
             margin-top: 20px;
         }
-        .btn-primary:hover {
+        input[type="submit"]:hover {
             background-color: #0056b3;
-            border-color: #0056b3;
         }
-        .btn-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-            border-radius: 10px;
+        button[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            border: none;
             padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
             width: 100%;
             margin-top: 10px;
         }
-        .btn-secondary:hover {
-            background-color: #5a6268;
-            border-color: #545b62;
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+        /* 오류 메시지 스타일 */
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+        }
+        /* 홈으로 링크 스타일 */
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="text-center mb-4">
-        <h2>회원 가입</h2>
-    </div>
-    <form action="" th:action th:object="${member}" method="post">
-        <h4 class="mb-3">회원 정보 입력</h4>
-        <div th:if="${#fields.hasGlobalErrors()}">
-            <div class="alert alert-danger" role="alert" th:each="err : ${#fields.globalErrors()}">
-                <span th:text="${err}">전체 오류 메시지</span>
-            </div>
+    <h2>회원가입 폼</h2>
+    <form action="/members/checkDuplicate" method="post">
+        <div class="input-group">
+            <label for="memberId">회원아이디:</label>
+            <input type="text" id="memberId" name="memberId" required th:value="${memberId}">
         </div>
-        <div class="form-group">
-            <label for="loginId" class="form-label">로그인 ID</label>
-            <input type="text" id="loginId" th:field="*{loginId}" class="form-control" th:errorclass="field-error">
-            <div class="field-error" th:errors="*{loginId}"></div>
-        </div>
-        <div class="form-group">
-            <label for="loginPass" class="form-label">비밀번호</label>
-            <input type="password" id="loginPass" th:field="*{loginPass}" class="form-control" th:errorclass="field-error">
-            <div class="field-error" th:errors="*{loginPass}"></div>
-        </div>
-        <div class="form-group">
-            <label for="memberName" class="form-label">이름</label>
-            <input type="text" id="memberName" th:field="*{memberName}" class="form-control" th:errorclass="field-error">
-            <div class="field-error" th:errors="*{memberName}"></div>
-        </div>
-        <button class="btn btn-primary" type="submit">회원 가입</button>
-        <button class="btn btn-secondary" onclick="location.href='items.html'" th:onclick="|location.href='@{/}'|" type="button">취소</button>
+        <button type="submit">중복체크</button>
+        <label class="error-message" th:if="${duplicateMessage}" th:text="${duplicateMessage}"></label>
     </form>
-</div> <!-- /container -->
+
+    <form action="/members/register" th:action="@{/members/add}" method="post">
+        <input type="hidden" name="memberId" required th:value="${memberId}">
+
+        <div class="input-group">
+            <label for="memberPass">비밀번호:</label>
+            <input type="password" id="memberPass" name="memberPass" required>
+        </div>
+
+        <div class="input-group">
+            <label for="memberName">이름:</label>
+            <input type="text" id="memberName" name="memberName" required>
+        </div>
+
+        <div class="input-group">
+            <label for="memberBirth">생년월일:</label>
+            <input type="date" id="memberBirth" name="memberBirth" required>
+        </div>
+
+        <div class="input-group">
+            <label for="phone">핸드폰 번호:</label>
+            <input type="text" id="phone" name="phone" required>
+        </div>
+
+        <input type="submit" value="가입하기">
+    </form>
+
+    <a th:href="@{/}">홈으로</a>
+</div>
 </body>
 </html>

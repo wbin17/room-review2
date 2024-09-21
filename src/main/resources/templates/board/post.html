@@ -7,42 +7,49 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
             padding: 20px;
-            background-color: #f8f9fa;
+            background-color: #f0f2f5;
             color: #333;
+            line-height: 1.6;
         }
-        .post {
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 30px;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
             background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
-        .post-title {
-            font-size: 32px;
-            font-weight: bold;
+        h1 {
+            text-align: center;
+            color: #444;
+            margin-bottom: 40px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .post-title, .post-info, .post-content {
             margin-bottom: 20px;
+        }
+        .post-title input, .post-info input, .post-content textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            color: #555;
+        }
+        .post-title input {
+            font-size: 24px;
+            font-weight: bold;
             color: #007bff;
         }
-        .post-info {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-        .post-content {
-            font-size: 20px;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
+        .post-content textarea {
+            height: 120px;
             resize: none;
+            font-size: 18px;
+            line-height: 1.5;
         }
         .button-container {
             margin-top: 40px;
@@ -50,14 +57,13 @@
         }
         .button-container button {
             padding: 14px 28px;
-            font-size: 20px;
-            margin-left: 20px;
-            cursor: pointer;
+            font-size: 18px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             transition: all 0.3s ease;
             outline: none;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         .edit-button {
             background-color: #007bff;
@@ -66,88 +72,179 @@
         .delete-button {
             background-color: #dc3545;
             color: #fff;
+            margin-left: 10px;
         }
         .back-button {
             background-color: #6c757d;
             color: #fff;
+            margin-left: 10px;
         }
         button:hover {
-            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            font-size: 24px;
+            color: #444;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+        form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            resize: none;
+            margin-bottom: 10px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #555;
+            background-color: #f9f9f9;
+        }
+        form button {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        form button:hover {
+            background-color: #218838;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+        .comment {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .comment p {
+            margin: 0;
+            color: #555;
+        }
+        .comment span {
+            display: block;
+            color: #888;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-<h1 style="text-align: center; margin-bottom: 40px;">게시판 - 게시글</h1>
+<div class="container">
+    <h1>게시판 - 게시글</h1>
 
-<!-- 게시글 내용 -->
-<div class="post">
-    <div class="post-title">
-        <input type="text" class="form-control" value="제목" th:value="${post.title}" readonly>
+    <div class="post">
+        <div class="post-title">
+            <input type="text" class="form-control" th:value="${post.title}" readonly>
+        </div>
+        <div class="post-info">
+            <input type="text" class="form-control" th:value="${post.writerId}" readonly>
+        </div>
+        <div class="post-content">
+            <div id="map" style="width: 100%; height: 150px; margin-bottom: 20px;"></div>
+            <textarea class="form-control" readonly th:text="${post.content}"></textarea>
+        </div>
+
+        <div class="button-container">
+            <div th:if="${loginMember.memberId == post.writerId}">
+                <button class="edit-button" th:onclick="|location.href='@{/posts/{postId}/edit(postId=${post.id})}'|">
+                    <i class="fas fa-edit"></i> 게시글 수정
+                </button>
+                <button type="button" class="delete-button" onclick="confirmDelete()">
+                    <i class="fas fa-trash-alt"></i> 게시글 삭제
+                </button>
+            </div>
+            <button class="back-button" th:onclick="|location.href='@{/posts/{postId}(postId=${post.id})}'|">
+                <i class="fas fa-arrow-left"></i> 목록으로
+            </button>
+        </div>
     </div>
-    <div class="post-info">
-        <input type="text" class="form-control" value="작성자" th:value="${post.writerName}" readonly>
-    </div>
-    <div class="post-content">
-        <div id="map" style="width: 20%; height: 150px;"></div>
-        <textarea class="form-control" rows="5" readonly th:text="${post.content}"></textarea>
-    </div>
 
-    <!-- 버튼 컨테이너 -->
-    <div class="button-container">
-        <button class="edit-button"
-                onclick="location.href='editForm.html'"
-                th:onclick="|location.href='@{/posts/{postId}/edit(postId=${post.id})}'|"><i class="fas fa-edit"></i> 게시글 수정</button>
+    <h2>리뷰 작성</h2>
+    <form th:action="@{/comments/add}" method="post">
+        <input type="hidden" name="postId" th:value="${post.id}">
+        <input type="hidden" name="memberId" th:value="${loginMember.memberId}">
+        <textarea id="commentText" name="commentText" rows="4" required></textarea>
+        <button type="submit">리뷰 작성</button>
+    </form>
 
-        <!-- 게시글 삭제 버튼 -->
-        <button class="delete-button" onclick="deletePost()" th:onclick="|location.href='@{/posts/{postId}/delete(postId=${post.id})}'|"><i class="fas fa-trash-alt"></i> 게시글 삭제</button>
-
-        <button class="back-button"
-                onclick="location.href='posts.html'"
-                th:onclick="|location.href='@{/posts}'|"><i class="fas fa-arrow-left"></i> 목록으로</button>
+    <h2>리뷰 목록</h2>
+    <div th:each="comment : ${comments}">
+        <div class="comment">
+            <p th:text="${comment.commentText}">리뷰 내용</p>
+            <span>작성자: <span th:text="${comment.memberId}">회원아이디</span></span>
+            <span>작성일: <span th:text="${comment.commentDate}">작성일</span></span>
+            <div th:if="${loginMember.memberId == comment.memberId}">
+                <form th:action="@{/comments/update}" method="post" style="display:inline;">
+                    <input type="hidden" name="commentId" th:value="${comment.commentId}">
+                    <input type="hidden" name="memberId" th:value="${comment.memberId}">
+                    <input type="hidden" name="postId" th:value="${post.id}">
+                    <textarea name="commentText" rows="3" required th:text="${comment.commentText}"></textarea>
+                    <button type="submit">수정</button>
+                </form>
+                <form th:action="@{/comments/delete}" method="post" style="display:inline;">
+                    <input type="hidden" name="commentId" th:value="${comment.commentId}">
+                    <input type="hidden" name="postId" th:value="${post.id}">
+                    <button type="submit" class="delete-button">삭제</button>
+                </form>
+            </div>
+        </div>
+        <hr>
     </div>
 </div>
 
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b4dbc6f0ee4df953d1c814f42f22a506&libraries=services"></script>
-
 <script th:inline="javascript">
-  var address = [[${post.address}]];
+    var kakaoApiKey = /*[[${kakaoJsKey}]]*/ '';
 </script>
 
+<script type="text/javascript" src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + kakaoApiKey + '&libraries=services'"></script>
+<script th:inline="javascript">
+        var address = [[${post.room.address}]];
+    </script>
 <script>
-    var mapContainer = document.getElementById('map');
-    var mapOption = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 3
-    };
+        var mapContainer = document.getElementById('map');
+        var mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667),
+            level: 3
+        };
 
-    var map = new kakao.maps.Map(mapContainer, mapOption);
-    var geocoder = new kakao.maps.services.Geocoder();
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+        var geocoder = new kakao.maps.services.Geocoder();
 
-    geocoder.addressSearch(address, function(result, status) {
-        if (status === kakao.maps.services.Status.OK) {
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-            var marker = new kakao.maps.Marker({
-                map: map,
-                position: coords
-            });
-            var infowindow = new kakao.maps.InfoWindow({
-                content: '<div style="width:150px;text-align:center;padding:6px 0;">집</div>'
-            });
-            infowindow.open(map, marker);
-            map.setCenter(coords);
-        } else {
-            alert('잘못된 주소 형식입니다\n지도를 표시할 수 없습니다: ' + status);
+        geocoder.addressSearch(address, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: '<div style="width:150px;text-align:center;padding:6px 0;">집</div>'
+                });
+                infowindow.open(map, marker);
+                map.setCenter(coords);
+            } else {
+                alert('잘못된 주소 형식입니다. 지도를 표시할 수 없습니다: ' + status);
+            }
+        });
+
+        function confirmDelete() {
+            if (confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
+                document.getElementById('deleteForm').submit();
+            }
         }
-    });
-
-    function deletePost() {
-        // 게시글 삭제 작업을 수행하는 코드를 여기에 추가
-        // 예를 들어, 삭제 작업을 서버에 요청하는 AJAX 요청을 보낼 수 있습니다.
-        // 이 부분은 프로젝트의 백엔드 로직에 따라 달라집니다.
-        // 삭제 작업이 완료되면, 원하는 페이지로 리디렉션할 수 있습니다.
-        alert("게시글을 삭제합니다.");
-    }
-</script>
-
+    </script>
 </body>
 </html>
+
+

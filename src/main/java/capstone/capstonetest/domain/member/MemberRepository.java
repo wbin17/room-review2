@@ -1,40 +1,34 @@
 package capstone.capstonetest.domain.member;
 
+import capstone.capstonetest.web.login.LoginForm;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.List;
 
-@Slf4j
 @Repository
+@RequiredArgsConstructor
+@Slf4j
 public class MemberRepository {
-    private static Map<Long,Member> store = new HashMap<>();
-    private static long sequence = 0L;
 
-    public Member save(Member member){
-        member.setId(++sequence);
-        log.info("save:member = {}", member);
-        store.put(member.getId(), member);
-        return member;
+    private final SqlSessionTemplate sql;
+
+    public void save(Member member){
+        sql.insert("Member.save", member);
     }
 
-    public Member findBYId(long id){
-        return store.get(id);
+    public int isMemberIdAvailable(String memberId) {
+        return sql.selectOne("Member.isMemberIdAvailable", memberId);
     }
 
-    public Optional<Member> findByLoginId(String loginId){
-        return findAll().stream()
-                .filter(m -> m.getLoginId().equals(loginId))
-                .findFirst();
+    public Member findById(LoginForm loginForm) {
+        return sql.selectOne("Member.findById", loginForm);
     }
 
-    public List<Member> findAll(){
-        return new ArrayList<>(store.values());
+    public Member findMemberByMemberId(String memberId){
+//        List<Member> members = sql.selectList("Member.findMemberWithBoards", memberId);
+        return sql.selectOne("Member.findMemberByMemberId", memberId);
     }
-
-    public void clearStore(){
-        store.clear();
-    }
-
-
 }

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시판</title>
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시판</title>
+  <style>
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
             background-color: #f5f5f5;
@@ -77,30 +77,30 @@
 <h1>자취방 리뷰 게시판</h1>
 
 <div class="table-container">
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>제목</th>
-            <th>작성자Id</th>
-            <th>작성일</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="post : ${posts}">
-            <td th:text="${post.id}">1</td>
-            <td><a href="post.html" th:href="@{/posts/{postId}(postId=${post.id})}" th:text="${post.title}">게시물 제목</a></td>
-            <td th:text="${post.writerId}">작성자</td>
-            <td th:text="${post.createdAt}"></td>
-        </tr>
-        </tbody>
-    </table>
+  <table>
+    <thead>
+    <tr>
+<!--      <th>ID</th>-->
+      <th>제목</th>
+      <th>작성자Id</th>
+      <th>작성일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="review : ${reviews}">
+<!--      <td th:text="${post.id}">1</td>-->
+      <td><a href="post.html" th:href="@{/posts/room/{postId}(postId=${review.id})}" th:text="${review.title}">게시물 제목</a></td>
+      <td th:text="${review.writerId}">작성자</td>
+      <td th:text="${review.createdAt}"></td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 
 <div class="button-container">
-    <button onclick="location.href = 'asd.html'"
-            th:onclick="|location.href='@{/posts/add}'|"
-            type="button">게시글 작성</button>
+  <button onclick="location.href = 'asd.html'"
+          th:onclick="|location.href='@{/map}'|"
+          type="button">지도로 돌아가기</button>
 </div>
 </body>
 </html>

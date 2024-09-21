@@ -85,8 +85,8 @@
   <div class="navbar">
     <b th:text="${member.memberName}+'님'">아</b>
     <a href="#home">홈</a><!-- Added text separator -->
-    <a href="board.html" th:href="@{/posts}">게시판</a>
-    <a href="mypage.html">마이페이지</a>
+    <a href="board.html" th:href="@{/map}">지도</a>
+    <a th:href="@{/members/{memberId}(memberId=${member.memberId})}">마이페이지</a>
     <form action="/logout" method="post"> <!-- 로그아웃을 처리하는 폼 -->
       <button type="submit" style="background-color: #333; color: white; border: none; cursor: pointer;">로그아웃</button>
     </form>

@@ -3,12 +3,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Member">
     <insert id="save" parameterType="member">
-        insert into member_table(loginId, loginPass, memberName)
-            values(#{loginId}, #{loginPass}, #{memberName})
+        insert into Member(memberId, memberPass, memberName, memberBirth, phone)
+        values(#{memberId}, #{memberPass}, #{memberName}, #{memberBirth}, #{phone})
     </insert>
 
-    <select id="findById" parameterType="Long" resultType="member">
-        select * from member_table where id = #{id}
+    <select id="isMemberIdAvailable" resultType="int">
+        SELECT COUNT(*) FROM Member WHERE memberId = #{memberId}
+    </select>
+
+    <select id="findById" parameterType="loginForm" resultType="member">
+        SELECT * FROM Member WHERE memberId = #{memberId} and memberPass = #{memberPass}
     </select>
 
     <select id="findAll" resultType="member">
@@ -17,6 +21,52 @@
 
     <select id="findByLoginId" parameterType="loginForm" resultType="member">
         SELECT * FROM member_table WHERE loginId = #{loginId} and loginPass = #{loginPass}
+    </select>
+
+<!--    <resultMap id="MemberDetailResultMap" type="Member">-->
+<!--        <id property="id" column="id"/>-->
+<!--        <result property="memberId" column="memberId"/>-->
+<!--        <result property="memberPass" column="memberPass"/>-->
+<!--        <result property="memberName" column="memberName"/>-->
+<!--        <result property="memberBirth" column="memberBirth"/>-->
+<!--        <result property="phone" column="phone"/>-->
+<!--        <association property="board" javaType="Board">-->
+<!--            <result property="address" column="address"/>-->
+<!--        </association>-->
+<!--    </resultMap>-->
+
+    <resultMap id="MemberResultMap" type="member">
+        <id property="id" column="id"/>
+        <result property="memberId" column="memberId"/>
+        <result property="memberName" column="memberName"/>
+        <result property="memberBirth" column="memberBirth"/>
+        <result property="phone" column="phone"/>
+        <collection property="boardList" ofType="board">
+            <id property="id" column="boardId"/>
+            <result property="title" column="title"/>
+            <result property="createdAt" column="createdAt"/>
+        </collection>
+    </resultMap>
+
+    <select id="findMemberWithBoards" resultMap="MemberResultMap" parameterType="String">
+        SELECT
+        m.memberId, m.memberName,
+        m.memberBirth, m.phone,
+        b.id ,b.title, b.createdAt
+        FROM
+        Member m
+        LEFT JOIN
+        Board b
+        ON
+        m.memberId = b.writerId
+        WHERE
+        m.memberId = #{memberId};
+    </select>
+
+    <select id="findMemberByMemberId" parameterType="String" resultType="member">
+        SELECT memberId, memberName, memberBirth, phone
+        FROM Member
+        WHERE memberId = #{memberId}
     </select>
 
 </mapper>

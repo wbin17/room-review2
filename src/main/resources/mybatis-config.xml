@@ -3,9 +3,11 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <typeAlias type="capstone.capstonetest.domain.Post" alias="board"></typeAlias>
+        <typeAlias type="capstone.capstonetest.domain.board.Board" alias="board"></typeAlias>
         <typeAlias type="capstone.capstonetest.domain.member.Member" alias="member"></typeAlias>
         <typeAlias type="capstone.capstonetest.web.login.LoginForm" alias="loginForm"></typeAlias>
+        <typeAlias type="capstone.capstonetest.domain.room.Room" alias="room"></typeAlias>
+        <typeAlias type="capstone.capstonetest.domain.postComment.PostComment" alias="postComment"></typeAlias>
 <!--        <typeAlias type="com.codingrecipe.board.dto.BoardFileDTO" alias="boardFile"></typeAlias>-->
     </typeAliases>
 </configuration>
