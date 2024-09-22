@@ -207,7 +207,16 @@
     var kakaoApiKey = /*[[${kakao.js.key}]]*/ '';
 </script>
 
-<script type="text/javascript" src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + kakaoApiKey + '&libraries=services'"></script>
+<!--<script type="text/javascript" src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + kakaoApiKey + '&libraries=services'"></script>-->
+
+<script type="text/javascript">
+
+    // 스크립트 태그를 동적으로 생성
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=' + kakaoApiKey + '&libraries=services';
+    document.head.appendChild(script);
+</script>
 <script th:inline="javascript">
         var address = [[${post.room.address}]];
     </script>
