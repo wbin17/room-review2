@@ -203,11 +203,11 @@
     </div>
 </div>
 
-<script th:inline="javascript">
-    var kakaoApiKey = /*[[${kakaoJsKey}]]*/ '';
-</script>
+<!--<script th:inline="javascript">-->
+<!--    var kakaoApiKey = /*[[${kakaoJsKey}]]*/ '';-->
+<!--</script>-->
 
-<script type="text/javascript" src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + kakaoApiKey + '&libraries=services'"></script>
+<script type="text/javascript" src="'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${kakao.js.Key} + '&libraries=services'"></script>
 <script th:inline="javascript">
         var address = [[${post.room.address}]];
     </script>
