@@ -47,7 +47,7 @@ public class MemberController {
 //            return "members/addMemberForm";  // 회원가입 폼 페이지로 이동
         }
         model.addAttribute("memberId", memberId);  // 입력된 회원 아이디를 다시 전달
-        return "/members/addMemberForm";
+        return "members/addMemberForm";
     }
 
     @GetMapping("/{memberId}")
@@ -60,7 +60,7 @@ public class MemberController {
             log.info("board = {}", post);
         }
         model.addAttribute("member",member);
-        return "/members/info";
+        return "members/info";
     }
 
 }
