@@ -40,21 +40,21 @@ public class BoardController {
         log.info("reviews = {}", reviews);
         model.addAttribute("roomId", roomId);
         model.addAttribute("reviews", reviews);
-        return "/board/roomId-review";
+        return "board/roomId-review";
     }
 
     @GetMapping
     public String posts(Model model){
         List<Board> posts = boardService.findAll();
         model.addAttribute("posts", posts);
-        return "/board/posts";
+        return "board/posts";
     }
     @GetMapping("/add")
     public String addForm(HttpServletRequest request, Model model){
         HttpSession session = request.getSession();
         Member loginMember = (Member)session.getAttribute(SessionConst.LOGIN_MEMBER);
         model.addAttribute("member", loginMember);
-        return "/board/addForm";
+        return "board/addForm";
     }
 
     @PostMapping("/add")
@@ -97,7 +97,7 @@ public class BoardController {
     public String editForm(@PathVariable("postId")Long postId,Model model){
         Board post = boardService.findById(postId);
         model.addAttribute("post",post);
-        return "/board/editForm";
+        return "board/editForm";
 
     }
 
@@ -159,6 +159,6 @@ public class BoardController {
 
 //        Post post = postRepository.findById(postId);
 //        model.addAttribute("post", post);
-        return "/board/post";
+        return "board/post";
     }
 }

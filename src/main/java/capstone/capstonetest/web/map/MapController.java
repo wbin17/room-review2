@@ -25,6 +25,6 @@ public class MapController {
         log.info("room = = {}",rooms.get(0));
         model.addAttribute("rooms",rooms);
         model.addAttribute("room",room);
-        return "/map/map";
+        return "map/map";
     }
 }
