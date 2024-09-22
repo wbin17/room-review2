@@ -12,7 +12,7 @@
     </select>
 
     <select id="findById" parameterType="loginForm" resultType="member">
-        SELECT * FROM Member WHERE memberId = #{memberId} and memberPass = #{memberPass}
+        SELECT * FROM member WHERE memberId = #{memberId} and memberPass = #{memberPass}
     </select>
 
     <select id="findAll" resultType="member">
